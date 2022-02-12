@@ -1,0 +1,14 @@
+{
+  "manifest_version": 2,
+  "name": "Notion Notetaker",
+  "description": "Take notes idk",
+  "version": "1.0.0",
+  "background": {
+    "scripts": ["./background.js"]
+  },
+  "options_page": "./options.html",
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["tabs", "storage", "<all_urls>"]
+}
