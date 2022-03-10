@@ -1,16 +1,8 @@
-let active_tab_id = 0;
+//let active_tab_id = 0;
 var copied_text = "";
 
-chrome.tabs.onActivated.addListener((tab) => {
-	chrome.tabs.get(tab.tabId, async (current_tab_info) => {
-		active_tab_id = tab.tabId;
-
-		chrome.tabs.insertCSS(active_tab_id, { file: "./styles.css" });
-		chrome.tabs.executeScript(null, { file: "./textCapture.js" }, () =>
-			console.log("I injected textCapture.js into tab " + active_tab_id)
-		);
-	});
-});
+chrome.tabs.onActivated.addListener(injectScript);
+chrome.tabs.onUpdated.addListener(injectScript);
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	if (request.message === "selected text sent") {
@@ -20,3 +12,26 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 		});
 	}
 });
+
+function injectScript(tabId) {
+	try {
+		chrome.tabs.get(tabId, async (current_tab_info) => {
+			//active_tab_id = tabId;
+			//if (!/^chrome:\/\//.test(current_tab_info.url)) {
+			chrome.tabs.insertCSS(tabId, { file: "./styles.css" });
+			chrome.tabs.executeScript(
+				null,
+				{ file: "./textCapture.js" },
+				(_) => {
+					let e = chrome.runtime.lastError;
+					if (e !== undefined) {
+						console.log(tabId, _, e);
+					}
+				}
+			);
+			//}
+		});
+	} catch (error) {
+		console.log(error);
+	}
+}
