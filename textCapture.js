@@ -29,11 +29,13 @@ window.addEventListener("click", function (e) {
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+	// Message comes from background to see if a script  has already been injected
 	if (request.message === "are_you_there_content_script?") {
 		sendResponse({ status: "yes" });
 	}
 });
 
+// Remove the button when you scroll, can't update its position in realtime
 window.addEventListener("scroll", function () {
 	removeButton();
 });
