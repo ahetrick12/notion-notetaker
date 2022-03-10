@@ -1,6 +1,4 @@
-// var text = "";
-// var element = null;
-var popup = null;
+var button = null;
 
 window.addEventListener("click", function (e) {
 	var textSelection = this.document.getSelection();
@@ -15,26 +13,26 @@ window.addEventListener("click", function (e) {
 		});
 
 		// Create popup button
-		if (popup == null) {
-			popup = document.createElement("div");
-			popup.className = "nn-popup-button";
-			document.body.appendChild(popup);
-			popup.innerText = "test123";
-			popup.setAttribute(
+		if (button == null) {
+			button = document.createElement("div");
+			button.className = "nn-popup-button";
+			document.body.appendChild(button);
+			button.innerText = "test123";
+			button.setAttribute(
 				"style",
 				"position: fixed; top: 0px; left: 0px; z-index: 2147483642;"
 			);
 		}
 	} else {
-		removePopup();
+		removeButton();
 	}
 });
 
 window.addEventListener("scroll", function () {
-	removePopup();
+	removeButton();
 });
 
-function removePopup() {
-	if (popup != null) popup.remove();
-	popup = null;
+function removeButton() {
+	if (button != null) button.remove();
+	button = null;
 }
