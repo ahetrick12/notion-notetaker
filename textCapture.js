@@ -28,6 +28,12 @@ window.addEventListener("click", function (e) {
 	}
 });
 
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+	if (request.message === "are_you_there_content_script?") {
+		sendResponse({ status: "yes" });
+	}
+});
+
 window.addEventListener("scroll", function () {
 	removeButton();
 });
