@@ -80,7 +80,7 @@ function runScriptInjection(tabId) {
 
 	chrome.scripting.executeScript({
 		target: { tabId: tabId },
-		files: ["foreground/textCapture.js"],
+		files: ["foreground/text-capture.js"],
 	});
 
 	console.log("INJECTED INTO " + tabId);
