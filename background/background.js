@@ -75,12 +75,12 @@ function runScriptInjection(tabId) {
 	// All injection and insertion processes
 	chrome.scripting.insertCSS({
 		target: { tabId: tabId },
-		files: ["./styles.css"],
+		files: ["styles.css"],
 	});
 
 	chrome.scripting.executeScript({
 		target: { tabId: tabId },
-		files: ["./textCapture.js"],
+		files: ["foreground/textCapture.js"],
 	});
 
 	console.log("INJECTED INTO " + tabId);
