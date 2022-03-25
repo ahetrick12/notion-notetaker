@@ -8,11 +8,12 @@ var button = null;
  * Window + mouse listeners
  */
 
-window.addEventListener("click", function (e) {
+window.addEventListener("click", () => {
 	var textSelection = this.document.getSelection();
 	var text = textSelection.toString();
 
 	if (chrome.runtime.lastError) {
+		// Ignore errors lol
 	}
 
 	// Store selected text in local storage

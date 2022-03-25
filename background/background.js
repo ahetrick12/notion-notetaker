@@ -23,7 +23,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
  * Message listeners
  */
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request) {
 	if (request.message === "selected_text_sent") {
 		chrome.storage.local.get(["key"], (result) => {
 			let copied_text = result.key;
@@ -55,8 +55,8 @@ function injectScript() {
 				function (msg) {
 					msg = msg || {};
 
-					// Ignore errors lol
 					if (chrome.runtime.lastError) {
+						// Ignore errors lol
 					}
 
 					// Inject scripts if no response
