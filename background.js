@@ -1,4 +1,12 @@
+/**
+ * Global vars
+ */
+
 var validUrlPattern = /^((http|https|ftp):\/\/)/;
+
+/**
+ * Tab listeners
+ */
 
 // Script injection listeners
 chrome.tabs.onActivated.addListener(injectScript);
@@ -11,6 +19,26 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
 	}
 });
 
+/**
+ * Message listeners
+ */
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+	if (request.message === "selected_text_sent") {
+		chrome.storage.local.get(["key"], (result) => {
+			let copied_text = result.key;
+			console.log("RECIEVED: " + copied_text);
+		});
+	}
+
+	// "return true" makes the listener async
+	return true;
+});
+
+/**
+ * Script functions
+ */
+
 function injectScript() {
 	// Get current tab info
 	chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -20,6 +48,7 @@ function injectScript() {
 
 			// Check if script has already been injected by sending a message
 			// If it is already present it will send back a "yes"
+			// tabs.sendMessage sends message to content scripts in a specific tabId
 			chrome.tabs.sendMessage(
 				tabId,
 				{ message: "are_you_there_content_script?" },
@@ -32,7 +61,7 @@ function injectScript() {
 
 					// Inject scripts if no response
 					if (msg.status != "yes") {
-						runScriptInjection();
+						runScriptInjection(tabId);
 					}
 				}
 			);
@@ -42,26 +71,17 @@ function injectScript() {
 	});
 }
 
-function runScriptInjection() {
+function runScriptInjection(tabId) {
 	// All injection and insertion processes
 	chrome.scripting.insertCSS({
-		target: { tabId: tabs[0].id },
+		target: { tabId: tabId },
 		files: ["./styles.css"],
 	});
 
 	chrome.scripting.executeScript({
-		target: { tabId: tabs[0].id },
+		target: { tabId: tabId },
 		files: ["./textCapture.js"],
 	});
 
 	console.log("INJECTED INTO " + tabId);
 }
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-	if (request.message === "selected text sent") {
-		chrome.storage.local.get(["key"], (result) => {
-			let copied_text = result.key;
-			console.log("RECIEVED: " + copied_text);
-		});
-	}
-});
