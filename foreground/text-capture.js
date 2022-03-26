@@ -1,5 +1,5 @@
 /**
- * Global vars
+ * Dynamic imports
  */
 
 var button = null;
@@ -55,14 +55,18 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 /**
- * Helper functions
+ * Helper Functions
  */
 
 function createButton(selectionRects) {
-	button = document.createElement("div");
-	button.className = "nn-popup-button";
-	button.innerText = "test123";
+	var xmlHttp = null;
 
+	xmlHttp = new XMLHttpRequest();
+	xmlHttp.open("GET", chrome.runtime.getURL("foreground/button.html"), false);
+	xmlHttp.send(null);
+
+	button = document.createElement("div");
+	button.innerHTML = xmlHttp.responseText;
 	document.body.appendChild(button);
 
 	button.setAttribute(
