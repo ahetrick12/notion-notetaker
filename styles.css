@@ -1,4 +1,22 @@
 .nn-popup-button {
-  color: red;
-  font-size: x-large;
+	color: #ededed;
+	font-size: large;
+	text-align: center;
+	background-color: #252525;
+	border-radius: 5px;
+	padding: 8px;
+	width: 100px;
+	transform: translateY(-100%);
+
+	animation: fadeIn 0.2s;
+	opacity: 1;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
 }

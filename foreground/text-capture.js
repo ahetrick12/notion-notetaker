@@ -11,6 +11,8 @@ var button = null;
 window.addEventListener("click", () => {
 	var textSelection = this.document.getSelection();
 	var text = textSelection.toString();
+	var selectionRects =
+		text == "" ? null : textSelection.getRangeAt(0).getClientRects();
 
 	if (chrome.runtime.lastError) {
 		// Ignore errors lol
@@ -27,7 +29,7 @@ window.addEventListener("click", () => {
 		});
 
 		// Create popup button
-		createButton();
+		createButton(selectionRects);
 	} else {
 		removeButton();
 	}
@@ -56,14 +58,20 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
  * Helper functions
  */
 
-function createButton() {
+function createButton(selectionRects) {
 	button = document.createElement("div");
 	button.className = "nn-popup-button";
-	document.body.appendChild(button);
 	button.innerText = "test123";
+
+	document.body.appendChild(button);
+
 	button.setAttribute(
 		"style",
-		"position: fixed; top: 0px; left: 0px; z-index: 2147483642;"
+		"position: fixed; top: " +
+			selectionRects[0].top +
+			"px; left: " +
+			selectionRects[0].left +
+			"px; z-index: 2147483642;"
 	);
 }
 
