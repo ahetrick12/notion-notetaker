@@ -3,6 +3,7 @@
  */
 
 var button = null;
+var selectedText = "";
 
 /**
  * Window + mouse listeners
@@ -23,10 +24,8 @@ window.addEventListener("click", () => {
 		console.log("SELECTED: " + text);
 
 		// Set selected text in storage for the background to retrieve
-		chrome.storage.local.set({ key: text }, () => {
-			// runtime.sendMessage since we are sending it from the content script to the application/extension page
-			chrome.runtime.sendMessage({ message: "selected_text_sent" });
-		});
+		//chrome.storage.local.set({ key: text });
+		selectedText = text;
 
 		// Create popup button
 		createButton(selectionRects);
@@ -77,6 +76,15 @@ function createButton(selectionRects) {
 			selectionRects[0].left +
 			"px; z-index: 2147483642;"
 	);
+
+	button.addEventListener("click", () => {
+		chrome.storage.local.set({ key: selectedText }, () => {
+			// When the button is clicked, send message to background telling it to check storage
+			// runtime instead of tabs since we are sending it from the content script to the application/extension page
+			chrome.runtime.sendMessage({ message: "selected_text_sent" });
+			console.log("Button clicked");
+		});
+	});
 }
 
 function removeButton() {
